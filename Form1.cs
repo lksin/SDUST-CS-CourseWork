@@ -9,11 +9,16 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ex
 {
     public partial class Form1 : Form
     {
+        double[,] matrixA = null;
+        double[,] matrixB = null;
+        Matrix A = new Matrix();
+        Matrix B = new Matrix();
 
         public Form1()
         {
@@ -26,26 +31,60 @@ namespace ex
         }
 
         private void button1_Click(object sender, EventArgs e) //add
+        { 
+            A.Read(textBox2.Text);
+            B.Read(textBox3.Text);
+            Print_Matrix(A.Add(B));
+        }
+        private void button2_Click(object sender, EventArgs e)
         {
+            A.Read(textBox2.Text);
+            B.Read(textBox3.Text);
+            Print_Matrix(A.Sub(B));
+        }
+        public void Print_Matrix(Matrix matrix) //输出
+        {
+            textBox1.Clear();
+            for (int i = 0; i < matrix.Rows; i++)
+            {
+                textBox1.Text += "|";
+                for (int j = 0; j < matrix.Columns; j++)
+                {
+                    textBox1.Text += matrix.data[i, j] + " ";
+                }
+                textBox1.Text += "|\r\n";
+            }
+        }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            A.Read(textBox2.Text);
+            B.Read(textBox3.Text);
+            Print_Matrix(A.Mul(B));
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            A.Read(textBox2.Text);
+            B.Read(textBox3.Text);
+            Print_Matrix(A.Trans());
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            A.Read(textBox2.Text);
+            B.Read(textBox3.Text);
+            Print_Matrix(A.Inverse());
         }
     }
     public class Matrix
     {
-        private double[,] data;
+        public Matrix() {}
 
-        public Matrix(double[,] data) //构造函数
-        {
-            this.data = data;
-        }
-        public int Rows //行数
-        {
-            get { return data.GetLength(0); }
-        }
-        public int Columns //列数
-        {
-            get { return data.GetLength(1); }
-        }
+        public double[,] data;
+        public int Rows;
+        public int Columns;
+
         public Matrix Add(Matrix other) //加法
         {
             if (this.Rows != other.Rows || this.Columns != other.Columns)
@@ -60,7 +99,7 @@ namespace ex
                     results[i, j] = this.data[i, j] + other.data[i, j];
                 }
             }
-            return new Matrix(results);
+            return new Matrix { data = results, Rows = this.Rows, Columns = this.Columns};
         }
         public Matrix Sub(Matrix other) //减法
         {
@@ -76,7 +115,7 @@ namespace ex
                     results[i, j] = this.data[i, j] - other.data[i, j];
                 }
             }
-            return new Matrix(results);
+            return new Matrix { data = results, Rows = this.Rows, Columns = this.Columns };
         }
         public Matrix Mul(Matrix other) //乘法
         {
@@ -96,7 +135,7 @@ namespace ex
                     }
                 }
             }
-            return new Matrix(results);
+            return new Matrix { data = results, Rows = this.Rows, Columns = this.Columns };
         }
         public Matrix Trans() //转置
         {
@@ -108,13 +147,14 @@ namespace ex
                     results[j, i] = this.data[i, j];
                 }
             }
-            return new Matrix(results);
+            return new Matrix{data = results, Rows = this.Rows, Columns = this.Columns };
         }
         public Matrix Inverse() //求逆
         {
             if (this.Rows != 2 || this.Columns != 2)
             {
-                throw new ArgumentException("矩阵不是2*2");
+                //throw new ArgumentException("矩阵不是2*2");
+
             }
             double det = this.data[0, 0] * this.data[1, 1] - this.data[0, 1] * this.data[1, 0]; //求行列式
             if (det == 0)
@@ -127,28 +167,36 @@ namespace ex
             results[0, 1] = -this.data[0, 1] / det;
             results[1, 0] = -this.data[1, 0] / det;
 
-            return new Matrix(results);
+            return new Matrix{data = results, Rows = this.Rows, Columns = this.Columns };
         }
-        public void Print_Martrix() //输出
+
+        public void Read(string input)
         {
-            for (int i = 0; i < this.Rows; i++)
+            try
             {
-                Console.Write("|");
-                for (int j = 0; j < this.Columns; j++)
+                string[] str = input.Trim().Split(new char[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                // 检查输入的第一部分是否可以转为行数和列数
+                Rows = Convert.ToInt32(str[0]);
+                Columns = Convert.ToInt32(str[1]);
+
+                // 初始化矩阵数据
+                data = new double[Rows, Columns];
+
+                // 填充矩阵数据，从输入的第三个元素开始（跳过行数和列数）
+                int index = 2;
+                for (int i = 0; i < Rows; i++)
                 {
-                    Console.Write(this.data[i, j] + " ");
+                    for (int j = 0; j < Columns; j++)
+                    {
+                        data[i, j] = Convert.ToDouble(str[index]);
+                        index++;
+                    }
                 }
-                Console.Write("|");
-                Console.WriteLine();
             }
-            Console.WriteLine();
-        }
-        public static double[] Read(string input)
-        {
-            Regn regn = new Regn();
-            double[,] matrix;
-            string[] str = input.Split(' ');
-            for(int i)
+            catch (Exception ex)
+            {
+                MessageBox.Show("读取矩阵失败: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
     public class Regn //判断输入是否为数字
