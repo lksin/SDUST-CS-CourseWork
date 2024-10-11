@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ex", "ex.csproj", "{A3C1EEA4-6AB4-4CE6-9C24-1D7DAC7BE6C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ex1", "Ex1.csproj", "{A3C1EEA4-6AB4-4CE6-9C24-1D7DAC7BE6C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{DD598CA5-7B2C-4946-8C80-D0EA8879DB0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ex2", "Ex2", "{79ECC308-875F-4458-8C78-30D000D77964}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ex2", "..\ex2\ex2\ex2.csproj", "{14D73748-F093-474E-8536-9336C4E9EF5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Matrix Calculator", "Matrix Calculator", "{731DABAE-E4D5-4E98-84AB-47B52DBF1BEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +23,17 @@ Global
 		{A3C1EEA4-6AB4-4CE6-9C24-1D7DAC7BE6C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3C1EEA4-6AB4-4CE6-9C24-1D7DAC7BE6C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3C1EEA4-6AB4-4CE6-9C24-1D7DAC7BE6C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14D73748-F093-474E-8536-9336C4E9EF5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D73748-F093-474E-8536-9336C4E9EF5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D73748-F093-474E-8536-9336C4E9EF5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D73748-F093-474E-8536-9336C4E9EF5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A3C1EEA4-6AB4-4CE6-9C24-1D7DAC7BE6C3} = {731DABAE-E4D5-4E98-84AB-47B52DBF1BEC}
+		{14D73748-F093-474E-8536-9336C4E9EF5B} = {79ECC308-875F-4458-8C78-30D000D77964}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53C14C00-1DDC-42F7-8C89-D1976802D221}

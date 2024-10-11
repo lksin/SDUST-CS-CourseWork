@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
 
 namespace ex
 {
@@ -28,37 +21,37 @@ namespace ex
 
         }
 
-        private void button1_Click(object sender, EventArgs e) //add
+        private void button1_Click(object sender, EventArgs e)
         { 
 
-            A.Read(textBox2.Text);
-            B.Read(textBox3.Text);
+            A.Read(textBox2.Text, "A");
+            B.Read(textBox3.Text, "B");
             Print_Matrix(A.Add(B));
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            A.Read(textBox2.Text);
-            B.Read(textBox3.Text);
+            A.Read(textBox2.Text, "A");
+            B.Read(textBox3.Text, "B");
             Print_Matrix(A.Sub(B));
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            A.Read(textBox2.Text);
-            B.Read(textBox3.Text);
+            A.Read(textBox2.Text, "A");
+            B.Read(textBox3.Text, "B");
             Print_Matrix(A.Mul(B));
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            A.Read(textBox2.Text);
-            B.Read(textBox3.Text);
+            A.Read(textBox2.Text, "A");
+            B.Read(textBox3.Text, "B");
             Print_Matrix(A.Trans());
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            A.Read(textBox2.Text);
-            B.Read(textBox3.Text);
+            A.Read(textBox2.Text, "A");
+            B.Read(textBox3.Text, "B");
             Print_Matrix(A.Inverse());
         }
         public void Print_Matrix(Matrix matrix) //输出
@@ -69,12 +62,20 @@ namespace ex
                 return ;
             }
             textBox1.Clear();
+            double eps = 1e-10;
             for (int i = 0; i < matrix.Rows; i++)
             {
                 textBox1.Text += "|";
                 for (int j = 0; j < matrix.Columns; j++)
                 {
-                    textBox1.Text += matrix.data[i, j].ToString("N2") + " ";
+                    if (matrix.data[i, j] - Math.Floor(matrix.data[i, j]) < eps)
+                    {
+                        textBox1.Text += matrix.data[i, j] + "    ";
+                    }
+                    else
+                    {
+                        textBox1.Text += matrix.data[i, j].ToString("N2") + " ";
+                    }
                 }
                 textBox1.Text += "|\r\n";
             }
@@ -82,7 +83,7 @@ namespace ex
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://github.com");
+            System.Diagnostics.Process.Start("https://github.com/lksin/SDUST-CS-CourseWork/");
         }
     }
     public class Matrix
@@ -204,7 +205,7 @@ namespace ex
         {
             if (this.Columns != other.Rows) //矩阵乘法的条件
             {
-                MessageBox.Show("不能对两个不同的矩阵进行乘法操作", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("不能两个矩阵进行乘法操作", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
             double[,] results = new double[this.Rows, other.Columns];
@@ -221,7 +222,7 @@ namespace ex
             }
             return new Matrix (results);
         }
-        public Matrix Trans() //转置
+        public Matrix Trans() //转置  bugs: error when matrix c!=r
         {
             double[,] results = new double[this.Columns, this.Rows];
             for (int i = 0; i < this.Rows; i++)
@@ -296,8 +297,14 @@ namespace ex
             }
         }
 
-        public void Read(string input)
+        public void Read(string input, string id)
         {
+            if (input == "")
+            {
+                MessageBox.Show($"矩阵{id}是空的，请重新输入", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                data = new double[0, 0];
+                return;
+            }
             try
             {
                 // 先按行拆分矩阵
@@ -318,7 +325,7 @@ namespace ex
                     string[] values = rows[i].Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     if (values.Length != Columns)
                     {
-                        throw new ArgumentException("每行列数不一致");
+                        MessageBox.Show("每行列数不一致", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
                     for (int j = 0; j < Columns; j++)
